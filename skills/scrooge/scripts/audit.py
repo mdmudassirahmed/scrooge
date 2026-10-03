@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""receipts: measure Claude Code token spend from local transcripts and recommend structural fixes.
+"""scrooge: measure Claude Code token spend from local transcripts and recommend structural fixes.
 
 Usage: audit.py [--projects-dir DIR] [--project PATH|NAME] [--since DAYS] [--json OUT] [--compare BEFORE.json] [--out FILE] [--top N]
 Prints a Markdown report. Read-only; nothing leaves the machine.
@@ -155,7 +155,7 @@ def report(top_ts, sub_ts, args):
     g, gl, gs = merge(allts), merge(top_ts), merge(sub_ts)
     out = []
     P = out.append
-    P(f"# receipts report  ({datetime.date.today()})")
+    P(f"# scrooge report  ({datetime.date.today()})")
     P(f"Transcripts: {len(top_ts)} sessions + {len(sub_ts)} subagent runs; assistant calls {fmt(g['calls'])}; "
       f"compactions seen {g['compactions']}.")
     P("Dollar figures = API list prices used as a relative proxy (plans also meter cached tokens at a reduced rate).\n")

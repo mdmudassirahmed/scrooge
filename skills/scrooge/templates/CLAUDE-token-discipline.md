@@ -1,4 +1,4 @@
-## Token discipline (installed by /receipts)
+## Token discipline (installed by /scrooge)
 - Start every session from this repo folder, never from a parent or home directory, so this file and `.claude/agents/` load.
   Dispatch work only to the named agents in `.claude/agents/` (each has a `model:` line), never to `general-purpose`;
   in Workflow scripts pass `model:` explicitly in every `agent()` call.

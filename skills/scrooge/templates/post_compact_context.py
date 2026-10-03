@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""SessionStart hook (matcher: compact), installed by /receipts scaffold.
+"""SessionStart hook (matcher: compact), installed by /scrooge scaffold.
 
 After every context compaction, print a small, exact state block that Claude Code appends to the context,
 so the facts come from disk instead of from the summary. Bounded to about 6 KB.

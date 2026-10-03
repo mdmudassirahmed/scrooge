@@ -2,8 +2,8 @@ import json, subprocess, sys, tempfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-AUDIT = ROOT / "skills" / "receipts" / "scripts" / "audit.py"
-APPLY = ROOT / "skills" / "receipts" / "scripts" / "apply.py"
+AUDIT = ROOT / "skills" / "scrooge" / "scripts" / "audit.py"
+APPLY = ROOT / "skills" / "scrooge" / "scripts" / "apply.py"
 FX = ROOT / "tests" / "fixtures" / "projects"
 
 

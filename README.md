@@ -2,16 +2,16 @@
   <img src="docs/the-bill.png" alt="The bill was not in the code. It was in what every call re-read." width="560">
 </p>
 
-# receipts
+# scrooge
 
-**Claude Code keeps the receipts. Read them before you buy a plugin.**
+**Counts every token so you do not have to.**
 
-Every Claude Code session is already logged on your disk, call by call, with the exact token counts, the model that answered, every tool call and every tool result. `receipts` reads those files and tells you, with numbers, where your usage actually went. Then it fixes the things that move the number.
+Every Claude Code session is already logged on your disk, call by call, with the exact token counts, the model that answered, every tool call and every tool result. `scrooge` reads those files and tells you, with numbers, where your usage actually went. Then it fixes the things that move the number.
 
 ```text
-/plugin marketplace add mdmudassirahmed/receipts
-/plugin install receipts@receipts
-/receipts
+/plugin marketplace add mdmudassirahmed/scrooge
+/plugin install scrooge@scrooge
+/scrooge
 ```
 
 Standard library Python, nothing leaves your machine, nothing is committed or deleted.
@@ -20,7 +20,7 @@ Standard library Python, nothing leaves your machine, nothing is committed or de
 
 One week of a large agentic build: one lead session, a dozen subagents, all day. Usage climbed every day. The popular advice was to shrink the output, with a terse-talking plugin or a code knowledge graph. Reading the transcripts instead gave a different picture.
 
-| What the receipts said | Number |
+| What the transcripts said | Number |
 |---|---|
 | Context at the peak, re-read on every single call | 966k tokens |
 | Calls above 300k context | 29% |
@@ -36,7 +36,7 @@ The spend was not in reading code and not in the model's prose. It was in re-rea
 
 Both are good tools for what they do. Neither touches the part of the bill that is usually largest.
 
-| | caveman | graphify | receipts |
+| | caveman | graphify | scrooge |
 |---|---|---|---|
 | What it changes | How the model talks | How the model reads code | How much context each call re-reads, which model answers, whether your config loads |
 | Where the saving comes from | Output tokens | Input tokens for code lookups | Cache-read tokens (the bulk of an agentic session) and model price |
@@ -44,16 +44,16 @@ Both are good tools for what they do. Neither touches the part of the bill that 
 | Tells you before you install it | no | no | yes, that is the point |
 | Measures the result afterwards | no | no | `--compare` a week later |
 
-`receipts` is not a replacement for either. Run it first. If the report says your output tokens dominate, caveman will help and the report will say so. If repeated code reads dominate, a code index will help. In most multi-agent sessions, they do not.
+`scrooge` is not a replacement for either. Run it first. If the report says your output tokens dominate, caveman will help and the report will say so. If repeated code reads dominate, a code index will help. In most multi-agent sessions, they do not.
 
 ## What the report shows
 
 ```text
-/receipts                          every project on this machine
-/receipts --project <path>         one project (the cwd you start Claude from)
-/receipts --since 7                last 7 days only
-/receipts --json before.json       save a snapshot
-/receipts --compare before.json    before and after table
+/scrooge                          every project on this machine
+/scrooge --project <path>         one project (the cwd you start Claude from)
+/scrooge --since 7                last 7 days only
+/scrooge --json before.json       save a snapshot
+/scrooge --compare before.json    before and after table
 ```
 
 1. **Totals.** Tokens by kind, split into lead sessions and subagents, with an API-dollar equivalent as a relative proxy for plan usage.
@@ -68,8 +68,8 @@ Both are good tools for what they do. Neither touches the part of the bill that 
 ## The fixes
 
 ```text
-/receipts apply [--cap 300000]     global: ~/.claude/settings.json, backup first, --dry-run first
-/receipts scaffold <repo>          repo side: CLAUDE.md rules, post-compaction hook, agent model check
+/scrooge apply [--cap 300000]     global: ~/.claude/settings.json, backup first, --dry-run first
+/scrooge scaffold <repo>          repo side: CLAUDE.md rules, post-compaction hook, agent model check
 ```
 
 | Fix | What it does | Why it is safe |
@@ -78,23 +78,23 @@ Both are good tools for what they do. Neither touches the part of the bill that 
 | Read guard | PreToolUse hook that denies a whole-file `Read` of a text file above 40 KB and asks for `offset`/`limit` or Grep | Images, PDFs and notebooks are exempt; the limit is `READ_GUARD_MAX_BYTES` |
 | Tiered agents | Lists every agent in `.claude/agents` without a `model:` line, with a suggested tier table | You choose the models; it only reports |
 | Token discipline | A CLAUDE.md section: start in the repo, named agents only, spec files, bounded tasks, logs to files, 300-word hand-backs | Plain rules the model follows; remove the section to undo |
-| Session retention | `cleanupPeriodDays` raised to 30 if it was under 7 | Your receipts stop being deleted after a day |
+| Session retention | `cleanupPeriodDays` raised to 30 if it was under 7 | Your scrooge stop being deleted after a day |
 
 `apply` writes a timestamped backup of `settings.json` and prints before and after. New sessions pick it up; running sessions keep their startup values. `scaffold` never commits; review with `git status`.
 
 ## Install without the plugin system
 
 ```bash
-git clone https://github.com/mdmudassirahmed/receipts
-cp -r receipts/skills/receipts ~/.claude/skills/
+git clone https://github.com/mdmudassirahmed/scrooge
+cp -r scrooge/skills/scrooge ~/.claude/skills/
 ```
 
-Then `/receipts` in any Claude Code session, or run the scripts directly:
+Then `/scrooge` in any Claude Code session, or run the scripts directly:
 
 ```bash
-python ~/.claude/skills/receipts/scripts/audit.py --since 7
-python ~/.claude/skills/receipts/scripts/apply.py --dry-run
-python ~/.claude/skills/receipts/scripts/apply.py scaffold /path/to/repo
+python ~/.claude/skills/scrooge/scripts/audit.py --since 7
+python ~/.claude/skills/scrooge/scripts/apply.py --dry-run
+python ~/.claude/skills/scrooge/scripts/apply.py scaffold /path/to/repo
 ```
 
 Python 3.8 or newer, standard library only. Windows, macOS and Linux.
@@ -104,13 +104,13 @@ Python 3.8 or newer, standard library only. Windows, macOS and Linux.
 Day one, from the repo folder:
 
 ```bash
-python ~/.claude/skills/receipts/scripts/audit.py --json before.json
+python ~/.claude/skills/scrooge/scripts/audit.py --json before.json
 ```
 
 A week later:
 
 ```bash
-python ~/.claude/skills/receipts/scripts/audit.py --since 7 --compare before.json
+python ~/.claude/skills/scrooge/scripts/audit.py --since 7 --compare before.json
 ```
 
 You get a before and after table: spend, average context per call, share of calls over 300k, share of agent runs with an inherited model, share of calls on each model tier. Post the table, not the promise.

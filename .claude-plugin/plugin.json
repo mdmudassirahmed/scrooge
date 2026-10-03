@@ -1,9 +1,9 @@
 {
-  "name": "receipts",
-  "description": "Read the Claude Code receipts already on your disk: where the tokens went (context per call, model mix, agents that inherited an expensive model, repeated reads, config that never loaded), then apply the structural fixes and measure the result a week later. Standard library only, nothing leaves the machine, never commits.",
+  "name": "scrooge",
+  "description": "Read the Claude Code transcripts already on your disk: where the tokens went (context per call, model mix, agents that inherited an expensive model, repeated reads, config that never loaded), then apply the structural fixes and measure the result a week later. Standard library only, nothing leaves the machine, never commits.",
   "version": "1.0.0",
   "author": { "name": "Mudassir Ahmed Mohammad", "url": "https://github.com/mdmudassirahmed" },
-  "homepage": "https://github.com/mdmudassirahmed/receipts",
+  "homepage": "https://github.com/mdmudassirahmed/scrooge",
   "license": "MIT",
   "skills": ["./skills/"]
 }

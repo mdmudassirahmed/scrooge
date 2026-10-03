@@ -1,8 +1,8 @@
 {
-  "name": "receipts",
+  "name": "scrooge",
   "owner": { "name": "Mudassir Ahmed Mohammad", "url": "https://github.com/mdmudassirahmed" },
-  "metadata": { "description": "Claude Code keeps the receipts. Read them before you buy a plugin.", "version": "1.0.0" },
+  "metadata": { "description": "Counts every token so you do not have to.", "version": "1.0.0" },
   "plugins": [
-    { "name": "receipts", "source": "./", "description": "Measure where Claude Code token spend goes from the local session transcripts, then apply the fixes that move the number: context cap with state re-injection, read guard, tiered agents, token discipline. Never commits, nothing leaves the machine.", "version": "1.0.0" }
+    { "name": "scrooge", "source": "./", "description": "Measure where Claude Code token spend goes from the local session transcripts, then apply the fixes that move the number: context cap with state re-injection, read guard, tiered agents, token discipline. Never commits, nothing leaves the machine.", "version": "1.0.0" }
   ]
 }

@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""receipts apply: install the structural token fixes.
+"""scrooge apply: install the structural token fixes.
 
   apply.py [--cap 300000] [--cleanup-days 30] [--memory-dir PATH] [--no-read-guard] [--dry-run]
       Global: edits ~/.claude/settings.json (timestamped backup first) and installs ~/.claude/hooks/read_guard.py.

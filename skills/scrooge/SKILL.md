@@ -1,24 +1,24 @@
 ---
-name: receipts
-description: Measure where Claude Code token spend goes, from the session transcripts already on disk (context size per call, model mix, agent runs that inherited an expensive model, files read over and over, whether CLAUDE.md and project agents could load), then apply the structural fixes (a context cap with state re-injected after compaction, a read guard, tiered agents) and compare before and after. Use when the user asks why usage is high, how to cut Claude Code token cost without losing quality, or runs /receipts. Local only, never commits.
+name: scrooge
+description: Measure where Claude Code token spend goes, from the session transcripts already on disk (context size per call, model mix, agent runs that inherited an expensive model, files read over and over, whether CLAUDE.md and project agents could load), then apply the structural fixes (a context cap with state re-injected after compaction, a read guard, tiered agents) and compare before and after. Use when the user asks why usage is high, how to cut Claude Code token cost without losing quality, or runs /scrooge. Local only, never commits.
 user-invocable: true
 compatibility: Claude Code (agent skills SKILL.md format). Scripts need Python 3.8+ (standard library only) and run on Windows, macOS and Linux.
 ---
 
-# Receipts
+# Scrooge
 
 Evidence first, then fixes. Claude Code logs every session to `~/.claude/projects/<encoded-cwd>/*.jsonl` with the token counts of every call (`input_tokens`, `cache_creation_input_tokens`, `cache_read_input_tokens`, `output_tokens`), the model, every tool call and every tool result. Subagent runs sit in subfolders. That is enough to say, with numbers, where the spend went and which fix would have changed it. Nothing is sent anywhere. Dollar figures are API list prices used only as a relative proxy for plan consumption.
 
 ## Commands
 
 ```
-/receipts                          report for every project on this machine
-/receipts --project <path|name>    one project (a cwd path, or its encoded folder name)
-/receipts --since 7                only transcripts modified in the last 7 days
-/receipts --json before.json       also save a snapshot for a later comparison
-/receipts --compare before.json    before and after table against a saved snapshot
-/receipts apply [--cap 300000]     global fixes in ~/.claude/settings.json (dry run, backup, then write)
-/receipts scaffold <repo>          repo side: CLAUDE.md rules, post-compaction hook, agent model check
+/scrooge                          report for every project on this machine
+/scrooge --project <path|name>    one project (a cwd path, or its encoded folder name)
+/scrooge --since 7                only transcripts modified in the last 7 days
+/scrooge --json before.json       also save a snapshot for a later comparison
+/scrooge --compare before.json    before and after table against a saved snapshot
+/scrooge apply [--cap 300000]     global fixes in ~/.claude/settings.json (dry run, backup, then write)
+/scrooge scaffold <repo>          repo side: CLAUDE.md rules, post-compaction hook, agent model check
 ```
 
 ## What the report shows
