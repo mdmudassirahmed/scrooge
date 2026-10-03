@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="190" viewBox="0 0 1200 190" role="img" aria-label="The four leaks: context that never shrinks, agents on the wrong model, config that never loaded, files read over and over">
+  <rect width="1200" height="190" rx="18" fill="#0B1220"/>
+  <g font-family="Segoe UI, Inter, Helvetica, Arial, sans-serif">
+    <g transform="translate(30,30)">
+      <rect width="270" height="130" rx="14" fill="#131C2E" stroke="#FF5D6C"/>
+      <text x="20" y="48" font-size="40" font-weight="800" fill="#FF5D6C">966k</text>
+      <text x="20" y="80" font-size="17" fill="#F2EEE6">context, re-read every call</text>
+      <text x="20" y="106" font-size="14" fill="#8E9BB4">29% of calls above 300k</text>
+    </g>
+    <g transform="translate(320,30)">
+      <rect width="270" height="130" rx="14" fill="#131C2E" stroke="#FF8A3D"/>
+      <text x="20" y="48" font-size="40" font-weight="800" fill="#FF8A3D">2 of 3</text>
+      <text x="20" y="80" font-size="17" fill="#F2EEE6">agent runs on Opus</text>
+      <text x="20" y="106" font-size="14" fill="#8E9BB4">inherited, never chosen</text>
+    </g>
+    <g transform="translate(610,30)">
+      <rect width="270" height="130" rx="14" fill="#131C2E" stroke="#FFD166"/>
+      <text x="20" y="48" font-size="40" font-weight="800" fill="#FFD166">9 of 10</text>
+      <text x="20" y="80" font-size="17" fill="#F2EEE6">sessions started wrong folder</text>
+      <text x="20" y="106" font-size="14" fill="#8E9BB4">CLAUDE.md and agents never loaded</text>
+    </g>
+    <g transform="translate(900,30)">
+      <rect width="270" height="130" rx="14" fill="#131C2E" stroke="#3DD6C4"/>
+      <text x="20" y="48" font-size="40" font-weight="800" fill="#3DD6C4">44×</text>
+      <text x="20" y="80" font-size="17" fill="#F2EEE6">one file read in full</text>
+      <text x="20" y="106" font-size="14" fill="#8E9BB4">84 files read 3+ times</text>
+    </g>
+  </g>
+</svg>

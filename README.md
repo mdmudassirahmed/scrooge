@@ -1,12 +1,25 @@
-# scrooge
+<p align="center">
+  <img src="docs/images/banner.svg" alt="scrooge: counts every token so you do not have to" width="100%">
+</p>
 
-Counts every token so you do not have to.
+<p align="center">
+  <a href="https://github.com/mdmudassirahmed/scrooge/blob/main/LICENSE"><img alt="MIT" src="https://img.shields.io/badge/license-MIT-3DD6C4?style=flat-square"></a>
+  <img alt="Python 3.8+" src="https://img.shields.io/badge/python-3.8%2B-9DB4FF?style=flat-square">
+  <img alt="stdlib only" src="https://img.shields.io/badge/deps-stdlib%20only-FFD166?style=flat-square">
+  <img alt="no network" src="https://img.shields.io/badge/network-none-5BD68A?style=flat-square">
+  <img alt="Claude Code plugin" src="https://img.shields.io/badge/Claude%20Code-plugin-FF8A3D?style=flat-square">
+  <a href="https://github.com/mdmudassirahmed/scrooge/stargazers"><img alt="stars" src="https://img.shields.io/github/stars/mdmudassirahmed/scrooge?style=flat-square&color=F2EEE6"></a>
+</p>
+
+# 🧾 scrooge
+
+**Counts every token so you do not have to.**
 
 Claude Code writes down every call you make: the context size, the model, every tool result. scrooge reads that ledger and tells you where the money went. Then it fixes the things that actually move the bill. Nothing leaves your machine.
 
 ---
 
-## What It Does
+## 🔍 What It Does
 
 Reads `~/.claude/projects/**/*.jsonl`, the transcripts Claude Code already keeps. Adds up the tokens per call. Finds the four leaks that terse-mode plugins cannot see:
 
@@ -15,11 +28,13 @@ Reads `~/.claude/projects/**/*.jsonl`, the transcripts Claude Code already keeps
 - **Config that never loaded.** Session started one folder above the repo. CLAUDE.md and your agents silently ignored.
 - **Files read over and over.** The same 145 KB file, 44 times.
 
+<p align="center"><img src="docs/images/leaks.svg" alt="The four leaks" width="100%"></p>
+
 Then it caps the context with a hook that restores exact state from disk after compaction, blocks whole-file reads of big files, lists the agents with no model, and measures the result a week later.
 
 ---
 
-## Install
+## ⚡ Install
 
 ```text
 /plugin marketplace add mdmudassirahmed/scrooge
@@ -37,7 +52,7 @@ Python 3.8+, standard library only. Windows, macOS, Linux.
 
 ---
 
-## Trigger Phrases
+## 🗣️ Trigger Phrases
 
 - `/scrooge`
 - `where are my tokens going`
@@ -47,7 +62,7 @@ Python 3.8+, standard library only. Windows, macOS, Linux.
 
 ---
 
-## Commands
+## 🧰 Commands
 
 | Command | What happens |
 |---|---|
@@ -61,7 +76,7 @@ Python 3.8+, standard library only. Windows, macOS, Linux.
 
 ---
 
-## Quick Example
+## 📊 Quick Example
 
 One week, one lead session, a dozen subagents. This is what scrooge said:
 
@@ -90,7 +105,7 @@ Two days after applying it, same project:
 
 ---
 
-## Why Not Caveman or Graphify
+## 🪨 Why Not Caveman or Graphify
 
 Both are good. Both work on a slice scrooge measures first.
 
@@ -104,7 +119,7 @@ Run scrooge first. If it says your output tokens dominate, install caveman and i
 
 ---
 
-## The Fixes
+## 🔧 The Fixes
 
 | Fix | What | Undo |
 |---|---|---|
@@ -118,7 +133,7 @@ Run scrooge first. If it says your output tokens dominate, install caveman and i
 
 ---
 
-## Boundaries
+## 🚧 Boundaries
 
 - No network. No git commits. No deletions. No edits outside `~/.claude` and the repo you name.
 - Dollar figures are API list prices used as a relative proxy. Plans meter differently; the ratios are what matter.
@@ -126,7 +141,7 @@ Run scrooge first. If it says your output tokens dominate, install caveman and i
 
 ---
 
-## Files
+## 📁 Files
 
 `skills/scrooge/SKILL.md` loaded by Claude at runtime. `scripts/audit.py` the report. `scripts/apply.py` the fixes. `scripts/read_guard.py` the hook. `templates/` the post-compaction hook, CLAUDE.md section and agent tier table that `scaffold` installs.
 

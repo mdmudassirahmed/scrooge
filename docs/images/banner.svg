@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="300" viewBox="0 0 1200 300" role="img" aria-label="scrooge: counts every token so you do not have to">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0B1220"/><stop offset="1" stop-color="#1B2740"/>
+    </linearGradient>
+    <linearGradient id="bar" x1="0" x2="1"><stop offset="0" stop-color="#FF8A3D"/><stop offset="1" stop-color="#FFD166"/></linearGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0H0V40" fill="none" stroke="#2A3A57" stroke-width="1" opacity=".6"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="300" rx="18" fill="url(#bg)"/>
+  <rect width="1200" height="300" rx="18" fill="url(#grid)"/>
+  <rect x="64" y="58" width="90" height="8" rx="4" fill="url(#bar)"/>
+  <text x="64" y="140" font-family="Segoe UI, Inter, Helvetica, Arial, sans-serif" font-size="78" font-weight="800" fill="#F2EEE6" letter-spacing="-2">scrooge</text>
+  <text x="64" y="188" font-family="Segoe UI, Inter, Helvetica, Arial, sans-serif" font-size="27" fill="#9CAED6">Counts every token so you do not have to.</text>
+  <g font-family="Consolas, JetBrains Mono, monospace" font-size="19" font-weight="600">
+    <rect x="64" y="222" width="146" height="40" rx="20" fill="#1B2740" stroke="#FF8A3D"/><text x="137" y="248" text-anchor="middle" fill="#FF8A3D">/scrooge</text>
+    <rect x="222" y="222" width="150" height="40" rx="20" fill="#1B2740" stroke="#3DD6C4"/><text x="297" y="248" text-anchor="middle" fill="#3DD6C4">audit</text>
+    <rect x="384" y="222" width="150" height="40" rx="20" fill="#1B2740" stroke="#9DB4FF"/><text x="459" y="248" text-anchor="middle" fill="#9DB4FF">apply</text>
+    <rect x="546" y="222" width="150" height="40" rx="20" fill="#1B2740" stroke="#FFD166"/><text x="621" y="248" text-anchor="middle" fill="#FFD166">compare</text>
+  </g>
+  <!-- ledger meter -->
+  <g transform="translate(860,70)">
+    <rect x="0" y="0" width="276" height="160" rx="14" fill="#131C2E" stroke="#2A3A57"/>
+    <text x="18" y="30" font-family="Consolas, monospace" font-size="14" fill="#8E9BB4">context per call</text>
+    <rect x="18" y="44" width="240" height="14" rx="7" fill="#1B2740"/><rect x="18" y="44" width="232" height="14" rx="7" fill="#FF5D6C"/>
+    <text x="18" y="76" font-family="Consolas, monospace" font-size="13" fill="#FF5D6C">before  966k</text>
+    <rect x="18" y="90" width="240" height="14" rx="7" fill="#1B2740"/><rect x="18" y="90" width="72" height="14" rx="7" fill="#5BD68A"/>
+    <text x="18" y="122" font-family="Consolas, monospace" font-size="13" fill="#5BD68A">after   300k cap</text>
+    <text x="18" y="146" font-family="Consolas, monospace" font-size="13" fill="#9CAED6">agents on Sonnet  8% → 39%</text>
+  </g>
+</svg>
