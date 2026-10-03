@@ -1,128 +1,133 @@
-<p align="center">
-  <img src="docs/the-bill.png" alt="The bill was not in the code. It was in what every call re-read." width="560">
-</p>
-
 # scrooge
 
-**Counts every token so you do not have to.**
+Counts every token so you do not have to.
 
-Every Claude Code session is already logged on your disk, call by call, with the exact token counts, the model that answered, every tool call and every tool result. `scrooge` reads those files and tells you, with numbers, where your usage actually went. Then it fixes the things that move the number.
+Claude Code writes down every call you make: the context size, the model, every tool result. scrooge reads that ledger and tells you where the money went. Then it fixes the things that actually move the bill. Nothing leaves your machine.
+
+---
+
+## What It Does
+
+Reads `~/.claude/projects/**/*.jsonl`, the transcripts Claude Code already keeps. Adds up the tokens per call. Finds the four leaks that terse-mode plugins cannot see:
+
+- **Context that never shrinks.** Every call re-reads the whole conversation. At 900k that is the bill.
+- **Agents on the wrong model.** No `model:` pinned, so every subagent inherits Opus. Nobody chose that.
+- **Config that never loaded.** Session started one folder above the repo. CLAUDE.md and your agents silently ignored.
+- **Files read over and over.** The same 145 KB file, 44 times.
+
+Then it caps the context with a hook that restores exact state from disk after compaction, blocks whole-file reads of big files, lists the agents with no model, and measures the result a week later.
+
+---
+
+## Install
 
 ```text
 /plugin marketplace add mdmudassirahmed/scrooge
 /plugin install scrooge@scrooge
-/scrooge
 ```
 
-Standard library Python, nothing leaves your machine, nothing is committed or deleted.
-
-## The story behind it
-
-One week of a large agentic build: one lead session, a dozen subagents, all day. Usage climbed every day. The popular advice was to shrink the output, with a terse-talking plugin or a code knowledge graph. Reading the transcripts instead gave a different picture.
-
-| What the transcripts said | Number |
-|---|---|
-| Context at the peak, re-read on every single call | 966k tokens |
-| Calls above 300k context | 29% |
-| Re-read tokens a 300k cap would have avoided | 27% of all of them |
-| Agent runs that silently inherited the most expensive model | 2 of 3 |
-| Sessions started one folder above the repo, so CLAUDE.md and the pinned agents never loaded | 9 of 10 |
-| One source file read in full | 44 times |
-| Share of output tokens that was visible text (the only thing a terse plugin can shrink) | under 5% |
-
-The spend was not in reading code and not in the model's prose. It was in re-reading the conversation, on a model nobody chose, from a folder that threw away the config. All three are structural, and all three are fixable in an afternoon.
-
-## Why not caveman or graphify?
-
-Both are good tools for what they do. Neither touches the part of the bill that is usually largest.
-
-| | caveman | graphify | scrooge |
-|---|---|---|---|
-| What it changes | How the model talks | How the model reads code | How much context each call re-reads, which model answers, whether your config loads |
-| Where the saving comes from | Output tokens | Input tokens for code lookups | Cache-read tokens (the bulk of an agentic session) and model price |
-| Ceiling in the case above | about 1% (visible text was under 5% of output) | near 0% (code reads were a small slice of input, and it had never indexed the repo) | about half the spend, pending the measured week |
-| Tells you before you install it | no | no | yes, that is the point |
-| Measures the result afterwards | no | no | `--compare` a week later |
-
-`scrooge` is not a replacement for either. Run it first. If the report says your output tokens dominate, caveman will help and the report will say so. If repeated code reads dominate, a code index will help. In most multi-agent sessions, they do not.
-
-## What the report shows
-
-```text
-/scrooge                          every project on this machine
-/scrooge --project <path>         one project (the cwd you start Claude from)
-/scrooge --since 7                last 7 days only
-/scrooge --json before.json       save a snapshot
-/scrooge --compare before.json    before and after table
-```
-
-1. **Totals.** Tokens by kind, split into lead sessions and subagents, with an API-dollar equivalent as a relative proxy for plan usage.
-2. **Context per call** in 100k buckets, and how many re-read tokens a cap at 200k, 300k, 400k or 500k would have avoided.
-3. **Model mix**, and which transcripts each model dominated.
-4. **Agent dispatch.** Subagent type and the model it was given. "inherited" means no model was pinned, so it ran on the parent's model.
-5. **Where sessions started**, and whether a CLAUDE.md and a `.claude/agents` folder exist there. Claude Code only loads them from the session folder and its parents. One folder too high and both are silently gone.
-6. **Tool results by size**, and files read whole three or more times.
-7. **The most expensive transcripts**, with their first prompt.
-8. **Recommendations** generated from the numbers above, each with the measured basis next to it.
-
-## The fixes
-
-```text
-/scrooge apply [--cap 300000]     global: ~/.claude/settings.json, backup first, --dry-run first
-/scrooge scaffold <repo>          repo side: CLAUDE.md rules, post-compaction hook, agent model check
-```
-
-| Fix | What it does | Why it is safe |
-|---|---|---|
-| Context cap | `CLAUDE_CODE_AUTO_COMPACT_WINDOW` so compaction happens at 300k instead of 1M | A SessionStart `compact` hook re-injects exact state from disk (task tracker, newest hand-off section, last commit, git status), so facts come from files, not from the summary |
-| Read guard | PreToolUse hook that denies a whole-file `Read` of a text file above 40 KB and asks for `offset`/`limit` or Grep | Images, PDFs and notebooks are exempt; the limit is `READ_GUARD_MAX_BYTES` |
-| Tiered agents | Lists every agent in `.claude/agents` without a `model:` line, with a suggested tier table | You choose the models; it only reports |
-| Token discipline | A CLAUDE.md section: start in the repo, named agents only, spec files, bounded tasks, logs to files, 300-word hand-backs | Plain rules the model follows; remove the section to undo |
-| Session retention | `cleanupPeriodDays` raised to 30 if it was under 7 | Your scrooge stop being deleted after a day |
-
-`apply` writes a timestamped backup of `settings.json` and prints before and after. New sessions pick it up; running sessions keep their startup values. `scaffold` never commits; review with `git status`.
-
-## Install without the plugin system
+Or copy one folder:
 
 ```bash
 git clone https://github.com/mdmudassirahmed/scrooge
 cp -r scrooge/skills/scrooge ~/.claude/skills/
 ```
 
-Then `/scrooge` in any Claude Code session, or run the scripts directly:
+Python 3.8+, standard library only. Windows, macOS, Linux.
 
-```bash
-python ~/.claude/skills/scrooge/scripts/audit.py --since 7
-python ~/.claude/skills/scrooge/scripts/apply.py --dry-run
-python ~/.claude/skills/scrooge/scripts/apply.py scaffold /path/to/repo
+---
+
+## Trigger Phrases
+
+- `/scrooge`
+- `where are my tokens going`
+- `why is my usage so high`
+- `cut my Claude Code cost`
+- `audit my sessions`
+
+---
+
+## Commands
+
+| Command | What happens |
+|---|---|
+| `/scrooge` | Report for every project on this machine |
+| `/scrooge --project <path>` | One project (the folder you start Claude from) |
+| `/scrooge --since 7` | Last 7 days only |
+| `/scrooge --json before.json` | Save a snapshot |
+| `/scrooge --compare before.json` | Before and after table |
+| `/scrooge apply` | Global fixes. Dry run first, backup, then write |
+| `/scrooge scaffold <repo>` | Repo side: CLAUDE.md rules, post-compaction hook, agent model check |
+
+---
+
+## Quick Example
+
+One week, one lead session, a dozen subagents. This is what scrooge said:
+
+```text
+avg context per call        443,000 tokens     (lead session)
+calls above 300k            29%                a 300k cap avoids 27% of all re-reads
+agent dispatches            219 of 331         inherited the parent model (Opus / Fable)
+sessions started in         C:\Users\Hp        9 of 10   CLAUDE.md: no   .claude/agents: no
+files read 3+ times         84                 pipeline.ts read whole 44 times
+visible text                < 5% of output     a terse plugin tops out near 1%
+
+1. Cap the auto-compact window at 300k and re-inject state from disk after compaction.
+2. Pin model: in .claude/agents frontmatter; pass model in Workflow agent() calls.
+3. Start sessions inside the repo. Nine of ten could not load the project config.
+4. Install the read guard; split files over 60 KB.
 ```
 
-Python 3.8 or newer, standard library only. Windows, macOS and Linux.
+Two days after applying it, same project:
 
-## Measuring the result
+| | before | after |
+|---|---|---|
+| avg context per call | 237k | 151k |
+| calls over 300k | 29% | 9% |
+| calls on Sonnet | 8% | 39% |
+| agent runs with inherited model | 66% | 49% |
 
-Day one, from the repo folder:
+---
 
-```bash
-python ~/.claude/skills/scrooge/scripts/audit.py --json before.json
-```
+## Why Not Caveman or Graphify
 
-A week later:
+Both are good. Both work on a slice scrooge measures first.
 
-```bash
-python ~/.claude/skills/scrooge/scripts/audit.py --since 7 --compare before.json
-```
+| | shrinks | ceiling in the case above |
+|---|---|---|
+| caveman | output tokens (how the model talks) | ~1% (visible text was under 5% of output) |
+| graphify | input tokens for code lookups | ~0% (code reads were a small slice; it had never indexed the repo) |
+| scrooge | cache-read tokens, model price, config that never loaded | about half the spend |
 
-You get a before and after table: spend, average context per call, share of calls over 300k, share of agent runs with an inherited model, share of calls on each model tier. Post the table, not the promise.
+Run scrooge first. If it says your output tokens dominate, install caveman and it will tell you so. In most multi-agent sessions it will not.
 
-## What it will not do
+---
 
-No network calls. No git commits. No deletions. No edits outside `~/.claude` and the repo you name. Dollar figures are API list prices used as a relative proxy, because subscription plans meter differently; the ratios are what matter.
+## The Fixes
 
-## How it works
+| Fix | What | Undo |
+|---|---|---|
+| Context cap | `CLAUDE_CODE_AUTO_COMPACT_WINDOW=300000` plus a `SessionStart` compact hook that prints tracker, newest hand-off section and git state from disk | delete the env line |
+| Read guard | PreToolUse hook. Whole-file `Read` over 40 KB denied, asks for `offset`/`limit` or Grep. Images and PDFs exempt | remove the hook entry |
+| Tiered agents | Lists every `.claude/agents` file without `model:`, with a suggested tier table. You choose | nothing to undo |
+| Token discipline | A CLAUDE.md section: start in the repo, named agents only, spec files, bounded tasks, logs to files, 300-word hand-backs | delete the section |
+| Retention | `cleanupPeriodDays` to 30 if it was under 7, so your ledger stops vanishing | restore the backup |
 
-Claude Code writes `~/.claude/projects/<encoded-cwd>/<session>.jsonl`, one JSON record per message, and subagent runs in subfolders. Each assistant record carries `usage` with `input_tokens`, `cache_creation_input_tokens`, `cache_read_input_tokens` and `output_tokens`, plus the model id. Tool calls and tool results are in the message content. `audit.py` walks every file, sums per call, buckets the context size, matches tool results to their calls, and checks each session's `cwd` against the files on disk. Nothing else is needed.
+`apply` backs up `settings.json` with a timestamp and prints before and after. New sessions pick it up. `scaffold` never commits.
 
-## Licence
+---
+
+## Boundaries
+
+- No network. No git commits. No deletions. No edits outside `~/.claude` and the repo you name.
+- Dollar figures are API list prices used as a relative proxy. Plans meter differently; the ratios are what matter.
+- Worktree clean-up and model choices are reported, never performed.
+
+---
+
+## Files
+
+`skills/scrooge/SKILL.md` loaded by Claude at runtime. `scripts/audit.py` the report. `scripts/apply.py` the fixes. `scripts/read_guard.py` the hook. `templates/` the post-compaction hook, CLAUDE.md section and agent tier table that `scaffold` installs.
 
 MIT.
