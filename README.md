@@ -94,14 +94,21 @@ visible text                < 5% of output     a terse plugin tops out near 1%
 4. Install the read guard; split files over 60 KB.
 ```
 
-Two days after applying it, same project:
+Two days after applying it, same project, measured by `/scrooge --since 2 --compare before.json`:
+
+<p align="center"><img src="docs/images/results.svg" alt="Measured two days after apply" width="100%"></p>
+
+**Same work, 40% cheaper per call: context per call -38%, calls over 300k 29%→8%, Sonnet share 8%→41%, subagent spend -77%, repeated file reads -43%.**
+
 
 | | before | after |
 |---|---|---|
-| avg context per call | 237k | 151k |
-| calls over 300k | 29% | 9% |
-| calls on Sonnet | 8% | 39% |
-| agent runs with inherited model | 66% | 49% |
+| avg context per call | 237k | 148k |
+| calls over 300k | 29% | 8% |
+| calls on Sonnet | 8% | 41% |
+| agent runs with inherited model | 66% | 48% |
+| files read 3+ times | 84 | 48 |
+| API-$ per call | 0.100 | 0.059 |
 
 ---
 

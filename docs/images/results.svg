@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="230" viewBox="0 0 1200 230" role="img" aria-label="Measured two days after apply: cost per call -40%, context per call -38%, calls over 300k 29% to 8%, Sonnet share 8% to 41%, subagent spend -77%, repeated reads -43%">
+  <defs><linearGradient id="g" x1="0" x2="1"><stop offset="0" stop-color="#FF8A3D"/><stop offset="1" stop-color="#FFD166"/></linearGradient></defs>
+  <rect width="1200" height="230" rx="18" fill="#0B1220"/>
+  <g font-family="Segoe UI, Inter, Helvetica, Arial, sans-serif">
+    <rect x="30" y="26" width="72" height="6" rx="3" fill="url(#g)"/>
+    <text x="30" y="60" font-size="18" font-weight="700" fill="#F2EEE6" letter-spacing=".08em">MEASURED 2 DAYS AFTER /scrooge apply</text>
+    <text x="1170" y="60" text-anchor="end" font-size="15" fill="#8E9BB4">same project · 19 sessions · 250 subagent runs · 24,657 calls</text>
+    <g transform="translate(30,84)">
+      <rect width="176" height="116" rx="14" fill="#131C2E" stroke="#5BD68A"/>
+      <text x="16" y="48" font-size="42" font-weight="800" fill="#5BD68A">-40%</text>
+      <text x="16" y="76" font-size="15" fill="#F2EEE6">cost per call</text>
+      <text x="16" y="98" font-size="13" fill="#8E9BB4">$0.100 → $0.059</text>
+    </g>
+    <g transform="translate(222,84)">
+      <rect width="176" height="116" rx="14" fill="#131C2E" stroke="#3DD6C4"/>
+      <text x="16" y="48" font-size="42" font-weight="800" fill="#3DD6C4">-38%</text>
+      <text x="16" y="76" font-size="15" fill="#F2EEE6">context per call</text>
+      <text x="16" y="98" font-size="13" fill="#8E9BB4">237k → 148k tokens</text>
+    </g>
+    <g transform="translate(414,84)">
+      <rect width="176" height="116" rx="14" fill="#131C2E" stroke="#9DB4FF"/>
+      <text x="16" y="48" font-size="42" font-weight="800" fill="#9DB4FF">29→8%</text>
+      <text x="16" y="76" font-size="15" fill="#F2EEE6">calls over 300k</text>
+      <text x="16" y="98" font-size="13" fill="#8E9BB4">-71%</text>
+    </g>
+    <g transform="translate(606,84)">
+      <rect width="176" height="116" rx="14" fill="#131C2E" stroke="#FFD166"/>
+      <text x="16" y="48" font-size="42" font-weight="800" fill="#FFD166">8→41%</text>
+      <text x="16" y="76" font-size="15" fill="#F2EEE6">calls on Sonnet</text>
+      <text x="16" y="98" font-size="13" fill="#8E9BB4">Opus 79% → 56%</text>
+    </g>
+    <g transform="translate(798,84)">
+      <rect width="176" height="116" rx="14" fill="#131C2E" stroke="#FF8A3D"/>
+      <text x="16" y="48" font-size="42" font-weight="800" fill="#FF8A3D">-77%</text>
+      <text x="16" y="76" font-size="15" fill="#F2EEE6">subagent spend</text>
+      <text x="16" y="98" font-size="13" fill="#8E9BB4">avg ctx 200k → 89k</text>
+    </g>
+    <g transform="translate(990,84)">
+      <rect width="180" height="116" rx="14" fill="#131C2E" stroke="#FF5D6C"/>
+      <text x="16" y="48" font-size="42" font-weight="800" fill="#FF5D6C">-43%</text>
+      <text x="16" y="76" font-size="15" fill="#F2EEE6">files read 3+ times</text>
+      <text x="16" y="98" font-size="13" fill="#8E9BB4">84 → 48</text>
+    </g>
+  </g>
+</svg>
